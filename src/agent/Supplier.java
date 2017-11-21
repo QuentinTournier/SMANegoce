@@ -29,36 +29,47 @@ public class Supplier extends Agent{
 
     }
 
-    public Offer answerMessage(Offer message){
-        if(message.getText().startsWith("SEARCH")){
+    public Offer answerMessage(Message message){
+        if(message.getOffer().getText().startsWith("SEARCH")){
             List<Ticket> listTicket = new ArrayList<>();
-            Message mess = answerInitialMessage(message.getOffer());
-            listTicket.add(mess.getOffer());
-            Deal newDeal = new Deal(mess.getIdMessage(), listTicket);
-            currentDeals.add(mess.getIdDeal(),newDeal);
+            Offer offer = answerInitialMessage(message.getOffer());
+            listTicket.add(offer.getTicket());
+            Deal newDeal = new Deal(generateIdDeal(message.getExpediteur()), listTicket);
+            currentDeals.add(newDeal);
             ////
         }
-        else if(message.getText().startsWith("ACCEPT")){
-            this.removeTicket(message.getOffer());
-            currentDeals.remove(message.getIdDeal());
+        else if(message.getOffer().getText().startsWith("ACCEPT")){
+            this.removeTicket(message.getOffer().getTicket());
+            currentDeals.remove(message.getIdMessage());
             return new Offer("Cool bro", null);
         }
-        else if(message.getText().startsWith("REFUSE")){
+        else if(message.getOffer().getText().startsWith("REFUSE")){
             return null;
         }
         else {
-            Deal d = currentDeals.get(message.getIdDeal());
+            Deal d = currentDeals.get(message.getIdMessage());
             d.addReceivedOffer(message.getOffer());
             Offer m = policy.process(d);
             if(m.getText().startsWith("ACCEPT")){
-                this.removeTicket(message.getOffer());
-                currentDeals.remove(message.getIdDeal());
+                this.removeTicket(message.getOffer().getTicket());
+                currentDeals.remove(message.getIdMessage());
             }else if(m.getText().startsWith("REFUSE")){
-                currentDeals.remove(message.getIdDeal());
+                currentDeals.remove(message.getIdMessage());
             }
         }
 
+        return null;
+    }
 
+    private String generateIdDeal(int expediteur) {
+        //TODO, correct this
+        String idDeal = ""+ this.getIdComm() +"_"+ expediteur;
+        for(Deal d : currentDeals){
+            if(d.getIdDeal().equals(idDeal)){
+                return "changeId";
+            }
+        }
+        return idDeal;
     }
 
     private void removeTicket(Ticket offer) {
@@ -69,9 +80,9 @@ public class Supplier extends Agent{
         }
     }
 
-    private Offer answerInitialMessage(Message message) {
+    private Offer answerInitialMessage(Offer offer) {
         for (Ticket t: store) {
-            if(t.isEqual(message.getOffer().getTicket())){
+            if(t.isEqual(offer.getTicket())){
                 return new Offer("OFFER", t);
             }
         }

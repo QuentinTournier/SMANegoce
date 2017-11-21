@@ -10,4 +10,12 @@ public abstract class  Agent {
     public String getName() {
         return name;
     }
+
+    public int getIdComm() {
+        return idComm;
+    }
+
+    public void setIdComm(int idComm) {
+        this.idComm = idComm;
+    }
 }
