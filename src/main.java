@@ -1,27 +1,35 @@
-import dialogue.*;
+import agent.Negotiator;
+import agent.Supplier;
+import agent.strategies.BasicPolicySupplier;
+import model.Ticket;
+import model.TicketManager;
+
+import java.util.List;
 
 public class main {
 
 
     public static void main(String [ ] args) {
-        Communication com = Communication.getInstance();
 
-        int fournId = com.nouveauFournisseur();
-        int negoId = com.nouveauNegociateur();
+        TicketManager ticketManager = new TicketManager();
 
-        com.envoyerMessage(new Message("Bonjour", negoId), fournId);
-        com.envoyerMessage(new Message("Bye", negoId), fournId);
-
-        com.lireMessage(fournId).afficher();
-        com.lireMessage(fournId).afficher();
+        List<Ticket> supplierTickets = ticketManager.createTickets(5, Ticket.PLANE);
+        Supplier supplier = new Supplier(new BasicPolicySupplier(),supplierTickets);
 
 
-        com.envoyerMessageTousFournisseurs(new Message("Broadcast", negoId));
+        Negotiator negotiator = new Negotiator(ticketManager.getOneTicketFromList(supplierTickets));
+
+        Thread thread = new Thread(supplier);
+        thread.start();
+        Thread thread2 = new Thread(negotiator);
+        thread2.start();
+
+        /*
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        com.lireMessage(fournId).afficher();
+        com.lireMessage(fournId).afficher();*/
     }
 }

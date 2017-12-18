@@ -11,9 +11,9 @@ public class Message {
     private int expediteur;
     private Date dateEnvoi;
     private Date dateLecture;
-    private int idMessage;
+    private String idMessage;
 
-    public Message(Offer texte, int expediteur,int idMessage) {
+    public Message(Offer texte, int expediteur,String idMessage) {
         this.texte = texte;
         this.expediteur = expediteur;
         this.dateEnvoi = null;
@@ -30,7 +30,7 @@ public class Message {
         System.out.println();
     }
 
-    public int getIdMessage() {
+    public String getIdMessage() {
         return idMessage;
     }
 

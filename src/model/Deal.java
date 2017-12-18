@@ -9,20 +9,43 @@ public class Deal {
     private String idDeal;
     private List<Ticket> dealOffered;
     private List<Ticket> dealReceived;
+    private int valueInit;
 
-    public Deal(String idDeal, List<Ticket> dealOffered) {
+    public Deal(String idDeal, List<Ticket> dealOffered, int valueInit) {
         this.idDeal = idDeal;
         this.dealOffered = dealOffered;
+        this.valueInit = valueInit;
+    }
+
+    public int getValueInit() {
+        return valueInit;
     }
 
     public String getIdDeal() {
         return idDeal;
     }
 
-    public void setIdDeal(String idDeal) {
-        this.idDeal = idDeal;
+    public void addReceivedOffer(Offer offer) {
+        dealOffered.add(offer.getTicket());
     }
 
-    public void addReceivedOffer(Offer offer) {
+    public void addSentOffer(Offer offer) {
+        dealOffered.add(offer.getTicket());
+    }
+
+    public Ticket getLastTicket(){
+        if(dealReceived.size()<1){
+            return null;
+        }
+        return dealReceived.get(dealReceived.size()-1);
+    }
+
+    public int getLastPrice() {
+
+        Ticket lastTicket = getLastTicket();
+        if(lastTicket == null){
+            return 0;
+        }
+        return lastTicket.getPrice();
     }
 }

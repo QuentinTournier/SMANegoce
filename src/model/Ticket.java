@@ -17,6 +17,11 @@ public class Ticket {
     private int price;
     private int type;
 
+    public Ticket(String destination, String departure) {
+        this.destination = destination;
+        this.departure = departure;
+    }
+
     public Ticket(String destination, String departure, Date takeOffDate, Date landingDate, int price, int type) {
         this.destination = destination;
         this.departure = departure;
@@ -51,18 +56,19 @@ public class Ticket {
     }
 
     public boolean isEqual(Ticket ticket){
-        if(!this.departure.equals(ticket.departure)){
+        if(!this.departure.equals(ticket.getDeparture())){
             return false;
         }
-        if(!this.destination.equals(ticket.destination)){
+        if(!this.destination.equals(ticket.getDestination())){
             return false;
         }
+        /*
         if(!this.takeOffDate.equals(ticket.takeOffDate)){
             return false;
         }
         if(!this.landingDate.equals(ticket.landingDate)){
             return false;
-        }
+        }*/
         return true;
     }
 }
