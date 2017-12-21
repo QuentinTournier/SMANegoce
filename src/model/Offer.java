@@ -20,4 +20,12 @@ public class Offer {
         return ticket;
     }
 
+    public String toString(){
+        if(ticket == null)
+            return "pas de ticket";
+
+        String message = text + " : " + ticket.getDeparture() + " - " + ticket.getDestination() + " : " + ticket.getPrice() + "€";
+        return message;
+    }
+
 }

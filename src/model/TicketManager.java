@@ -18,7 +18,7 @@ public class TicketManager {
         List<Ticket> list = new ArrayList<>();
         Random random =new Random();
         int price = 50;
-        int departure = random.nextInt(places.size());
+        int departure = 2; // Lyon
         int arrival = 0;
 
         Date date = new Date();
@@ -42,5 +42,24 @@ public class TicketManager {
         Random random =new Random();
         int ticketNb = random.nextInt(supplierTickets.size());
         return supplierTickets.get(ticketNb);
+    }
+
+    public Ticket createClientTicket() {
+        String destination = "Paris";
+        String departure = "Lyon";
+        int price = 10;
+        int type = Ticket.PLANE;
+
+        Date date = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DATE, 1);
+        Date date2 = c.getTime();
+        Ticket t = new Ticket(destination,departure, date, date2, price, type);
+        return t;
+    }
+
+    public Ticket changeTicketPrice(Ticket lastTicket, int priceOffered) {
+        return new Ticket(lastTicket.getDestination(),lastTicket.getDeparture(), lastTicket.getTakeOffDate(), lastTicket.getLandingDate(), priceOffered, lastTicket.getType());
     }
 }

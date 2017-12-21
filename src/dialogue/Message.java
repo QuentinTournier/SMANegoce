@@ -24,10 +24,12 @@ public class Message {
     public void afficher(){
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         System.out.println("De : "+expediteur);
-        System.out.println("Envoyé le : "+df.format(dateEnvoi));
-        System.out.println("Lu le : "+df.format(dateLecture));
-        System.out.println("Corps : "+texte);
-        System.out.println();
+        if(texte == null ){
+            System.out.println("no text");
+        }else{
+            System.out.println("Corps : \n"+ texte.toString());
+        }
+        System.out.println("---------");
     }
 
     public String getIdMessage() {

@@ -64,6 +64,7 @@ public class Communication {
     public synchronized void envoyerMessage(Message message, int destinataire){
         message.setDateEnvoi(new Date());
         nouveauxMessages.get(destinataire).addLast(message);
+        message.afficher();
     }
 
     public synchronized void envoyerMessageTousFournisseurs(Message message){

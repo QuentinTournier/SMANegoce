@@ -1,8 +1,11 @@
 package agent;
 
 
+import agent.strategies.Politics;
+import agent.strategies.SimplePolicyNegotiator;
 import dialogue.Communication;
 import dialogue.Message;
+import model.Deal;
 import model.Offer;
 import model.Ticket;
 
@@ -14,12 +17,15 @@ import model.Ticket;
 public class Negotiator extends Agent implements Runnable{
 
     private Ticket ticket;
+    private Politics policy;
+    private Deal d;
 
-    public Negotiator(Ticket ticket) {
+    public Negotiator(Politics policy, Ticket ticket) {
         this.ticket = ticket;
         Communication communication = Communication.getInstance();
         idComm = communication.nouveauNegociateur();
-
+        this.policy = policy;
+        d = new Deal(ticket.getPrice());
     }
 
     @Override
@@ -32,40 +38,47 @@ public class Negotiator extends Agent implements Runnable{
 
         while (!done){
             Message mess = communication.lireMessage(this.getIdComm());
+            if (mess != null){
+                d.addReceivedOffer(mess.getOffer());
+            }
             if(mess == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 continue;
             }
             System.out.println("I got an offer");
 
-            Message messAnswer = new Message(this.answerMessage(mess), this.getIdComm(), mess.getIdMessage());
-            communication.envoyerMessage(messAnswer, mess.getExpediteur());
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            Offer answer = this.answerMessage(mess);
+            if(answer == null){
+                done = true;
+                continue;
             }
+            Message messAnswer = new Message(answer, this.getIdComm(), mess.getIdMessage());
+            communication.envoyerMessage(messAnswer, mess.getExpediteur());
+
         }
+
     }
 
-    private int getExpeditorIdFromString(String stringId){
-        return Integer.valueOf(stringId.split("_")[1]);
-    }
 
     @Override
     public Offer answerMessage(Message message) {
-        Offer offer = null;
-        if(message.getOffer().getText().startsWith("OFFER")){
-            return new Offer("Cool bro", null);
+
+        if(message.getOffer().getText().startsWith("PROPOSE")){
+            return policy.process(d);
         }
         else if(message.getOffer().getText().startsWith("ACCEPT")){
-            return new Offer("Cool bro", null);
+            System.out.println("We have the ticket");
         }
         else if(message.getOffer().getText().startsWith("REFUSE")){
-            return null;
+            System.out.println("We won't have any ticket :'( ");
         }
-        else {
-            return new Offer("Not Cool bro", null);
-        }
-
+        System.out.println("end of negociation");
+        done = true;
+        return null;
     }
+
 }

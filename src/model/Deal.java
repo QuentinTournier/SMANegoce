@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,10 +12,15 @@ public class Deal {
     private List<Ticket> dealReceived;
     private int valueInit;
 
-    public Deal(String idDeal, List<Ticket> dealOffered, int valueInit) {
+    public Deal(int valueInit) {
+        this("_", new ArrayList<>(), valueInit);
+    }
+
+    public Deal(String idDeal, List<Ticket> dealReceived, int valueInit) {
         this.idDeal = idDeal;
-        this.dealOffered = dealOffered;
+        this.dealReceived = dealReceived;
         this.valueInit = valueInit;
+        dealOffered = new ArrayList<>();
     }
 
     public int getValueInit() {
@@ -26,7 +32,7 @@ public class Deal {
     }
 
     public void addReceivedOffer(Offer offer) {
-        dealOffered.add(offer.getTicket());
+        dealReceived.add(offer.getTicket());
     }
 
     public void addSentOffer(Offer offer) {

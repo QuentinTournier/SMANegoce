@@ -31,6 +31,10 @@ public class Ticket {
         this.type = type;
     }
 
+    public int getType() {
+        return type;
+    }
+
     public String getDestination() {
         return destination;
     }

@@ -30,21 +30,27 @@ public class Supplier extends Agent implements Runnable{
 
     public Offer answerMessage(Message message){
         Offer offer = null;
-        Deal d = currentDeals.get(getExpeditorIdFromString(message.getIdMessage()));
+        Deal d = null;
+        if(! message.getOffer().getText().startsWith("SEARCH")) {
+            d = currentDeals.get(getExpeditorIdFromString(message.getIdMessage()));
+        }
 
         if(message.getOffer().getText().startsWith("SEARCH")){
             List<Ticket> listTicket = new ArrayList<>();
             offer = answerInitialMessage(message.getOffer());
             listTicket.add(offer.getTicket());
-            Deal newDeal = new Deal(generateIdDeal(message.getExpediteur()), listTicket, offer.getTicket().getPrice());
-            currentDeals.add(newDeal);
+            d = new Deal(generateIdDeal(message.getExpediteur()), listTicket, offer.getTicket().getPrice());
+            currentDeals.add(d);
         }
         else if(message.getOffer().getText().startsWith("ACCEPT")){
+
             this.removeTicket(message.getOffer().getTicket());
             currentDeals.remove(message.getIdMessage());
             return new Offer("Cool bro", null);
         }
         else if(message.getOffer().getText().startsWith("REFUSE")){
+            System.out.println("end of negociation supplier");
+            done = true;
             return null;
         }
         else {
@@ -81,7 +87,7 @@ public class Supplier extends Agent implements Runnable{
     private Offer answerInitialMessage(Offer offer) {
         for (Ticket t: store) {
             if(t.isEqual(offer.getTicket())){
-                return new Offer("OFFER", t);
+                return new Offer("PROPOSE", t);
             }
         }
         return new Offer("Null", null);
@@ -93,10 +99,17 @@ public class Supplier extends Agent implements Runnable{
         Communication communication = Communication.getInstance();
         while (!done){
             Message mess = communication.lireMessage(this.getIdComm());
+            System.out.println("Nb nouveaux messages " + communication.nbNouveauxMessages(idComm));
             if(mess != null){
                 System.out.println("Reading new Message");
-                Message messAnswer = new Message(this.answerMessage(mess), this.getIdComm(),generateIdDeal(mess.getExpediteur()));
+                Offer answer = this.answerMessage(mess);
 
+                if(answer == null){
+                    System.out.println("Deal done");
+                    done = true;
+                    continue;
+                }
+                Message messAnswer = new Message(answer , this.getIdComm(),generateIdDeal(mess.getExpediteur()));
                 communication.envoyerMessage(messAnswer, mess.getExpediteur());
             }
             try {

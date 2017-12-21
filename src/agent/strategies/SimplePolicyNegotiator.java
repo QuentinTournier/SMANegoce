@@ -4,24 +4,23 @@ import model.Deal;
 import model.Offer;
 import model.TicketManager;
 
-/**
- * Created by Quentin on 06/11/2017.
- */
-public class BasicPolicySupplier implements Politics {
+public class SimplePolicyNegotiator implements Politics {
 
-    private double minValueFactor;
+    private double maxValueFactor;
     private int nbNegoce;
     private int currentNbNegoce;
 
-    public BasicPolicySupplier(double minValueFactor, int nbNegoce) {
-        this.minValueFactor = minValueFactor;
+    public SimplePolicyNegotiator(double maxValueFactor, int nbNegoce) {
+        this.maxValueFactor = maxValueFactor;
         this.nbNegoce = nbNegoce;
+        currentNbNegoce = 0;
     }
 
+    @Override
     public Offer process(Deal d) {
         int initPrice = d.getValueInit();
         int lastPrice = d.getLastPrice();
-        if(initPrice * minValueFactor < lastPrice){
+        if(initPrice * maxValueFactor > lastPrice){
             return new Offer("ACCEPT", d.getLastTicket() );
         }
         else{
@@ -30,7 +29,7 @@ public class BasicPolicySupplier implements Politics {
             }
             currentNbNegoce ++;
 
-            double negociationFactor = 1 - (minValueFactor - 1) * ((double)currentNbNegoce / nbNegoce );
+            double negociationFactor = 1 + (maxValueFactor - 1) * ((double)currentNbNegoce / nbNegoce );
             int priceOffered = (int) Math.round(initPrice * negociationFactor);
             TicketManager ticketManager = new TicketManager();
             return new Offer("PROPOSE", ticketManager.changeTicketPrice(d.getLastTicket(), priceOffered));
