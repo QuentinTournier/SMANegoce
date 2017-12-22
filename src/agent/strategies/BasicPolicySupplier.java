@@ -30,7 +30,7 @@ public class BasicPolicySupplier implements Politics {
             }
             currentNbNegoce ++;
 
-            double negociationFactor = 1 - (minValueFactor - 1) * ((double)currentNbNegoce / nbNegoce );
+            double negociationFactor = 1 - (1-minValueFactor) * ((double)currentNbNegoce / nbNegoce );
             int priceOffered = (int) Math.round(initPrice * negociationFactor);
             TicketManager ticketManager = new TicketManager();
             return new Offer("PROPOSE", ticketManager.changeTicketPrice(d.getLastTicket(), priceOffered));

@@ -47,7 +47,7 @@ public class TicketManager {
     public Ticket createClientTicket() {
         String destination = "Paris";
         String departure = "Lyon";
-        int price = 10;
+        int price = 1;
         int type = Ticket.PLANE;
 
         Date date = new Date();
