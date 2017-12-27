@@ -36,4 +36,12 @@ public class BasicPolicySupplier implements Politics {
             return new Offer("PROPOSE", ticketManager.changeTicketPrice(d.getLastTicket(), priceOffered));
         }
     }
+
+    public Politics copy() {
+        return new BasicPolicySupplier(this.minValueFactor, this.nbNegoce);
+    }
+
+    public String toString(){
+        return "BasicPolicySupplier : (" + this.minValueFactor + "," + this.nbNegoce + ")";
+    }
 }

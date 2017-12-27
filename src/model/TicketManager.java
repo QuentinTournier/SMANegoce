@@ -4,7 +4,7 @@ import java.util.*;
 
 public class TicketManager {
 
-    ArrayList<String> places = new ArrayList<>();
+    ArrayList<String> places = new ArrayList<String>();
 
     public TicketManager() {
         String[] elements = {"Paris", "Marseille", "Lyon", "Toulouse", "Nice", "Nantes", "Strasbourg", "Montpellier", "Bordeaux", "Rennes"};
@@ -14,12 +14,18 @@ public class TicketManager {
         }
     }
 
-    public List<Ticket> createTickets(int nbTickets, int type){
-        List<Ticket> list = new ArrayList<>();
+    public List<Ticket> createTickets(int nbTickets, int type) {
+        return createTickets(nbTickets, type, 2, 50); // Lyon
+    }
+
+    public String numberToPlace(int i){
+        return places.get(i);
+    }
+
+    public List<Ticket> createTickets(int nbTickets, int type, int departure, int price){
+        List<Ticket> list = new ArrayList<Ticket>();
         Random random =new Random();
-        int price = 50;
-        int departure = 2; // Lyon
-        int arrival = 0;
+        int arrival;
 
         Date date = new Date();
         Calendar c = Calendar.getInstance();
@@ -38,17 +44,13 @@ public class TicketManager {
         return list;
     }
 
-    public Ticket getOneTicketFromList(List<Ticket> supplierTickets) {
-        Random random =new Random();
-        int ticketNb = random.nextInt(supplierTickets.size());
-        return supplierTickets.get(ticketNb);
-    }
-
     public Ticket createClientTicket() {
-        String destination = "Paris";
-        String departure = "Lyon";
-        int price = 10;
-        int type = Ticket.PLANE;
+        return createClientTicket("Paris", "Lyon", 10, Ticket.PLANE);
+    }
+    public Ticket createClientTicket(int price) {
+        return createClientTicket("Paris", "Lyon", price, Ticket.PLANE);
+    }
+    public Ticket createClientTicket(String destination, String  departure, int price, int type) {
 
         Date date = new Date();
         Calendar c = Calendar.getInstance();
@@ -62,4 +64,11 @@ public class TicketManager {
     public Ticket changeTicketPrice(Ticket lastTicket, int priceOffered) {
         return new Ticket(lastTicket.getDestination(),lastTicket.getDeparture(), lastTicket.getTakeOffDate(), lastTicket.getLandingDate(), priceOffered, lastTicket.getType());
     }
+
+    public Ticket getOneTicketFromList(List<Ticket> supplierTickets) {
+        Random random =new Random();
+        int ticketNb = random.nextInt(supplierTickets.size());
+        return supplierTickets.get(ticketNb);
+    }
+
 }

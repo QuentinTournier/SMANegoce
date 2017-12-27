@@ -13,14 +13,14 @@ public class Deal {
     private int valueInit;
 
     public Deal(int valueInit) {
-        this("_", new ArrayList<>(), valueInit);
+        this("_", new ArrayList<Ticket>(), valueInit);
     }
 
     public Deal(String idDeal, List<Ticket> dealReceived, int valueInit) {
         this.idDeal = idDeal;
         this.dealReceived = dealReceived;
         this.valueInit = valueInit;
-        dealOffered = new ArrayList<>();
+        dealOffered = new ArrayList<Ticket>();
     }
 
     public int getValueInit() {

@@ -1,5 +1,8 @@
 package dialogue;
 
+import model.Offer;
+import model.Ticket;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,9 +15,11 @@ public class Communication {
     private int nbFournisseurs;
     private static final int nbFournisseursMax = 10000;
     private int nbNegociateurs;
+    private Offer lastOffer;
 
     private Communication()
     {
+        lastOffer = null;
         nouveauxMessages = new HashMap<Integer, LinkedList<Message>>();
         messagesArchives = new HashMap<Integer, ArrayList<Message>> ();
         nbFournisseurs = 0;
@@ -56,6 +61,7 @@ public class Communication {
             Message message = nouveauxMessages.get(id).removeFirst();
             message.setDateLecture(new Date());
             messagesArchives.get(id).add(message);
+            lastOffer = message.getOffer();
             return message;
         }
         return null;
@@ -64,7 +70,7 @@ public class Communication {
     public synchronized void envoyerMessage(Message message, int destinataire){
         message.setDateEnvoi(new Date());
         nouveauxMessages.get(destinataire).addLast(message);
-        message.afficher();
+        //message.afficher();
     }
 
     public synchronized void envoyerMessageTousFournisseurs(Message message){
@@ -73,7 +79,41 @@ public class Communication {
         }
     }
 
+    public LinkedList<Message> getNouveauxMessages(int id) {
+        return nouveauxMessages.get(id);
+    }
+
     public static int getNbFournisseursMax() {
         return nbFournisseursMax;
+    }
+
+    public void reset(){
+
+        for (int i =0 ; i<nbFournisseurs; i++){
+            messagesArchives.get(i).clear();
+            nouveauxMessages.get(i).clear();
+        }
+        for (int i =nbFournisseursMax ; i<nbFournisseursMax + nbNegociateurs; i++){
+            messagesArchives.get(i).clear();
+            nouveauxMessages.get(i).clear();
+        }
+
+        nbFournisseurs = 0;
+        nbNegociateurs = 0;
+    }
+
+    public Offer getLastOffer() {
+        return lastOffer;
+    }
+
+    public int getNbMessagesTotal(){
+        int count = 0;
+        for (int i =0 ; i<nbFournisseurs; i++){
+            count += messagesArchives.get(i).size();
+        }
+        for (int i =nbFournisseursMax ; i<nbFournisseursMax + nbNegociateurs; i++){
+            count += messagesArchives.get(i).size();
+        }
+        return count;
     }
 }

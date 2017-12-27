@@ -28,9 +28,7 @@ public class Negotiator extends Agent implements Runnable{
         d = new Deal(ticket.getPrice());
     }
 
-    @Override
     public void run() {
-        System.out.println("Negotiator running");
         Communication communication = Communication.getInstance();
         Offer offer = new Offer ("SEARCH", ticket);
         Message messageInit = new Message(offer, this.getIdComm(), null);
@@ -49,11 +47,9 @@ public class Negotiator extends Agent implements Runnable{
                 }
                 continue;
             }
-            System.out.println("I got an offer");
 
             Offer answer = this.answerMessage(mess);
             if(answer == null){
-                done = true;
                 continue;
             }
             Message messAnswer = new Message(answer, this.getIdComm(), mess.getIdMessage());
@@ -68,17 +64,17 @@ public class Negotiator extends Agent implements Runnable{
     public Offer answerMessage(Message message) {
 
         if(message.getOffer().getText().startsWith("PROPOSE")){
-            return policy.process(d);
+            Offer offer = policy.process(d);
+            if (!offer.getText().startsWith("PROPOSE")){
+                done = true;
+            }
+            return offer;
         }
-        else if(message.getOffer().getText().startsWith("ACCEPT")){
-            System.out.println("We have the ticket");
-        }
-        else if(message.getOffer().getText().startsWith("REFUSE")){
-            System.out.println("We won't have any ticket :'( ");
-        }
-        System.out.println("end of negociation");
         done = true;
         return null;
     }
 
+    public Politics getPolicy() {
+        return policy;
+    }
 }

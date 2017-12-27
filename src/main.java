@@ -12,7 +12,7 @@ public class main {
 
     public static void main(String [ ] args) {
 
-        TicketManager ticketManager = new TicketManager();
+        /*TicketManager ticketManager = new TicketManager();
 
         List<Ticket> supplierTickets = ticketManager.createTickets(20, Ticket.PLANE);
         Supplier supplier = new Supplier(new BasicPolicySupplier(1.5,6),supplierTickets);
@@ -23,7 +23,10 @@ public class main {
         Thread thread = new Thread(supplier);
         thread.start();
         Thread thread2 = new Thread(negotiator);
-        thread2.start();
+        thread2.start();*/
+
+        Evaluation eval = new Evaluation(20, 50);
+        eval.evaluateAllNegotiators();
 
     }
 }

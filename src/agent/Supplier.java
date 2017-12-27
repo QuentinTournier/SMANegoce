@@ -8,6 +8,7 @@ import model.Ticket;
 import model.Offer;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class Supplier extends Agent implements Runnable{
     public Supplier(Politics policy, List<Ticket> store){
         this.store = store;
         this.policy = policy;
-        currentDeals = new ArrayList<>();
+        currentDeals = new ArrayList<Deal>();
         Communication comm = Communication.getInstance();
         this.idComm = comm.nouveauFournisseur();
         this.name = "SUPP"+ this.idComm;
@@ -36,7 +37,7 @@ public class Supplier extends Agent implements Runnable{
         }
 
         if(message.getOffer().getText().startsWith("SEARCH")){
-            List<Ticket> listTicket = new ArrayList<>();
+            List<Ticket> listTicket = new ArrayList<Ticket>();
             offer = answerInitialMessage(message.getOffer());
             listTicket.add(offer.getTicket());
             d = new Deal(generateIdDeal(message.getExpediteur()), listTicket, offer.getTicket().getPrice());
@@ -46,10 +47,10 @@ public class Supplier extends Agent implements Runnable{
 
             this.removeTicket(message.getOffer().getTicket());
             currentDeals.remove(message.getIdMessage());
+            done = true;
             return new Offer("Cool bro", null);
         }
         else if(message.getOffer().getText().startsWith("REFUSE")){
-            System.out.println("end of negociation supplier");
             done = true;
             return null;
         }
@@ -60,8 +61,10 @@ public class Supplier extends Agent implements Runnable{
             if(m.getText().startsWith("ACCEPT")){
                 this.removeTicket(message.getOffer().getTicket());
                 currentDeals.remove(message.getIdMessage());
+                done = true;
             }else if(m.getText().startsWith("REFUSE")){
                 currentDeals.remove(message.getIdMessage());
+                done = true;
             }
             return m;
         }
@@ -71,16 +74,19 @@ public class Supplier extends Agent implements Runnable{
     }
 
     private String generateIdDeal(int expediteur) {
-        String idDeal = ""+ this.getIdComm() +"_"+ expediteur;
+            String idDeal = ""+ this.getIdComm() +"_"+ expediteur;
 
         return idDeal;
     }
 
     private void removeTicket(Ticket offer) {
-        for (Ticket t: store) {
-            if(t.isEqual(offer)){
+        Iterator<Ticket> iter = store.iterator();
+
+        while (iter.hasNext()) {
+            Ticket ticket = iter.next();
+
+            if (ticket.isEqual(offer))
                 store.remove(offer);
-            }
         }
     }
 
@@ -93,19 +99,13 @@ public class Supplier extends Agent implements Runnable{
         return new Offer("Null", null);
     }
 
-    @Override
     public void run() {
-        System.out.println("Supplier running");
         Communication communication = Communication.getInstance();
         while (!done){
             Message mess = communication.lireMessage(this.getIdComm());
-            System.out.println("Nb nouveaux messages " + communication.nbNouveauxMessages(idComm));
             if(mess != null){
-                System.out.println("Reading new Message");
                 Offer answer = this.answerMessage(mess);
-
                 if(answer == null){
-                    System.out.println("Deal done");
                     done = true;
                     continue;
                 }
@@ -118,6 +118,10 @@ public class Supplier extends Agent implements Runnable{
                 e.printStackTrace();
             }
         }
+    }
+
+    public Politics getPolicy() {
+        return policy;
     }
 
     private int getExpeditorIdFromString(String stringId){

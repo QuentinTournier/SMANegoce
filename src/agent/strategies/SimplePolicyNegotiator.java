@@ -16,7 +16,6 @@ public class SimplePolicyNegotiator implements Politics {
         currentNbNegoce = 0;
     }
 
-    @Override
     public Offer process(Deal d) {
         int initPrice = d.getValueInit();
         int lastPrice = d.getLastPrice();
@@ -34,5 +33,13 @@ public class SimplePolicyNegotiator implements Politics {
             TicketManager ticketManager = new TicketManager();
             return new Offer("PROPOSE", ticketManager.changeTicketPrice(d.getLastTicket(), priceOffered));
         }
+    }
+
+    public Politics copy() {
+        return new SimplePolicyNegotiator(this.maxValueFactor, this.nbNegoce);
+    }
+
+    public String toString(){
+        return "SimplePolicyNegociator : (" + this.maxValueFactor + "," + this.nbNegoce + ")";
     }
 }

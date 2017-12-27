@@ -9,4 +9,6 @@ import model.Offer;
 public interface Politics {
 
     Offer process(Deal d);
+
+    Politics copy();
 }

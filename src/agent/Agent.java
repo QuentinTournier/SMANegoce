@@ -24,4 +24,6 @@ public abstract class  Agent {
     }
 
     public abstract Offer answerMessage(Message mess);
+
+
 }
