@@ -10,12 +10,12 @@ import java.util.List;
 public class main {
 
 
-    public static void main(String [ ] args) {
+    public static void main(String [] args) {
 
         /*TicketManager ticketManager = new TicketManager();
 
         List<Ticket> supplierTickets = ticketManager.createTickets(20, Ticket.PLANE);
-        Supplier supplier = new Supplier(new BasicPolicySupplier(1.5,6),supplierTickets);
+        Supplier supplier = new Supplier(new BasicPolicySupplier(0.8,6),supplierTickets);
 
 
         Negotiator negotiator = new Negotiator(new SimplePolicyNegotiator(1.5, 6), ticketManager.createClientTicket());
