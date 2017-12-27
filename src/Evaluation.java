@@ -44,12 +44,12 @@ public class Evaluation {
         System.out.println("---------------");
         List<Politics> politicsSupplier = new ArrayList<Politics>();
         politicsSupplier.add(new BasicPolicySupplier(1.0,6));
-        politicsSupplier.add(new BasicPolicySupplier(1.1,6));
-        politicsSupplier.add(new BasicPolicySupplier(1.25,6));
-        politicsSupplier.add(new BasicPolicySupplier(1.40,6));
-        politicsSupplier.add(new BasicPolicySupplier(1.50,6));
-        politicsSupplier.add(new BasicPolicySupplier(1.75,6));
-        politicsSupplier.add(new BasicPolicySupplier(2.0,6));
+        politicsSupplier.add(new BasicPolicySupplier(0.95,6));
+        politicsSupplier.add(new BasicPolicySupplier(0.9,6));
+        politicsSupplier.add(new BasicPolicySupplier(0.8,6));
+        politicsSupplier.add(new BasicPolicySupplier(0.7,6));
+        politicsSupplier.add(new BasicPolicySupplier(0.6,6));
+        politicsSupplier.add(new BasicPolicySupplier(0.5,6));
 
         for(Politics politic: politicsSupplier){
 

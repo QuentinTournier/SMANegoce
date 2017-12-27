@@ -80,14 +80,13 @@ public class Supplier extends Agent implements Runnable{
     }
 
     private void removeTicket(Ticket offer) {
-        Iterator<Ticket> iter = store.iterator();
+        /*Iterator<Ticket> iter = store.iterator();
 
         while (iter.hasNext()) {
             Ticket ticket = iter.next();
-
             if (ticket.isEqual(offer))
                 store.remove(offer);
-        }
+        }*/
     }
 
     private Offer answerInitialMessage(Offer offer) {
@@ -101,7 +100,7 @@ public class Supplier extends Agent implements Runnable{
 
     public void run() {
         Communication communication = Communication.getInstance();
-        while (!done){
+        while (!done || 1==1){
             Message mess = communication.lireMessage(this.getIdComm());
             if(mess != null){
                 Offer answer = this.answerMessage(mess);

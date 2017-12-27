@@ -45,7 +45,7 @@ public class TicketManager {
     }
 
     public Ticket createClientTicket() {
-        return createClientTicket("Paris", "Lyon", 10, Ticket.PLANE);
+        return createClientTicket("Paris", "Lyon", 30, Ticket.PLANE);
     }
     public Ticket createClientTicket(int price) {
         return createClientTicket("Paris", "Lyon", price, Ticket.PLANE);

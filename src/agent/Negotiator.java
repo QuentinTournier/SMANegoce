@@ -66,6 +66,7 @@ public class Negotiator extends Agent implements Runnable{
         if(message.getOffer().getText().startsWith("PROPOSE")){
             Offer offer = policy.process(d);
             if (!offer.getText().startsWith("PROPOSE")){
+                System.out.println(offer.getText());
                 done = true;
             }
             return offer;
